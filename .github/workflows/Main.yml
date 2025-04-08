@@ -41,7 +41,7 @@ jobs:
          run: vstest.console.exe .\Myntra.Tests\bin\Release\Myntra.Tests.dll
          
        - name: Upload artifact
-         uses: actions/upload-artifact@v3.1.3
+         uses: ./_work/_actions/upload-artifact
          with:
           name: EZRepBundle
           path: "./_build"
