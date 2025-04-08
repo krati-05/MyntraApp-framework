@@ -32,20 +32,16 @@ jobs:
          working-directory: ${{ github.workspace }}
 
        - name: Build solution
-         run: msbuild.exe Myntra/Myntra.sln /p:platform="Any CPU" /p:configuration="Release"
+         run: msbuild.exe Myntra/Myntra.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+
          working-directory: ${{ github.workspace }}
 
 
        - name: Run Tests
          run: vstest.console.exe .\Myntra.Tests\bin\Release\Myntra.Tests.dll
          
-       - name: Prepare artifact staging directory
-         run: |
-          mkdir -p artifact_output
-          cp -r Myntra/tests/Myntra.Tests/bin/Release/* artifact_output/
-          
-       - name: Publish artifact
-         uses: actions/upload-artifact@v3
+       - name: Upload artifact
+         uses: actions/upload-artifact@v1.0.0
          with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: artifact_output/
+          name: EZRepBundle
+          path: "./_build"
