@@ -33,4 +33,4 @@ jobs:
 
 
        - name: Run Tests
-         run: vstest.console.exe .\tests\Myntra.Tests\bin\Release\Myntra.Tests.dll
+         run: vstest.console.exe .\Myntra.Tests\bin\Release\Myntra.Tests.dll
