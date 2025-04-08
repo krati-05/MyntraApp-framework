@@ -24,6 +24,7 @@ jobs:
          with:
           nuget-version: '5.x'
 
+
        - name: Setup VSTest
          uses: darenm/Setup-VSTest@v1
 
