@@ -1,4 +1,4 @@
-name: Build and Tests
+name: Main branch CI
 
 on:  
    push:
@@ -13,9 +13,11 @@ jobs:
        
        - name: Setup MSBuild
          uses: microsoft/setup-msbuild@v1
-
-       - name: Setup NuGet
-         uses: NuGet/setup-nuget@v5.x
+         
+       - name: Setup NuGet.exe for use with actions
+         uses: NuGet/setup-nuget@v2.0.0
+         with:
+          nuget-version: '5.x'
 
        - name: Setup VSTest
          uses: darenm/Setup-VSTest@v1
