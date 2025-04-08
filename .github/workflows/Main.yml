@@ -9,7 +9,7 @@ env:
   
 jobs:  
    build:    
-     runs-on: dotnet
+     runs-on: [self-hosted, dotnet]
 
      steps:
      
@@ -49,31 +49,34 @@ jobs:
 
           
    deploy:
-    name: Deploy to Azure VM
-    runs-on: dotnet
+    name: Deploy to IIS on Azure VM
+    runs-on: [self-hosted, VM]
     needs: build
     environment:
       name: Main
       
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
-          name: drop
+         name: drop
+         path: 'C:\Deploy\MyntraApp-githubactions'  # Target folder for deployment on VM
 
-      - name: Deploy via PowerShell to Azure VM
-        shell: powershell
+      - name: Stop IIS website
         run: |
-          $securePassword = ConvertTo-SecureString "${{ secrets.AZURE_VM_PASSWORD }}" -AsPlainText -Force
-          $cred = New-Object System.Management.Automation.PSCredential("${{ secrets.AZURE_VM_USERNAME }}", $securePassword)
+         Import-Module WebAdministration
+         Stop-Website -Name "MyntraApp-githubactions"
+        shell: powershell
 
-          $session = New-PSSession -ComputerName "${{ secrets.AZURE_VM_HOST }}" -Credential $cred -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+      - name: Deploy files to IIS site
+        run: |
+         Copy-Item "C:\Deploy\MyntraApp-githubactions\*" "C:\inetpub\wwwroot\MyntraApp-githubactions" -Recurse -Force
+        shell: powershell
 
-          Copy-Item -Path "./drop/*" -Destination "C:\inetpub\wwwroot\MyntraApp" -Recurse -ToSession $session
-
-          Invoke-Command -Session $session -ScriptBlock {
-            Import-Module WebAdministration
-            Restart-WebAppPool -Name 'MyntraAppPool'
-          }
-
-          Remove-PSSession $session
+      - name: Start IIS website
+        run: |
+         Start-Website -Name "MyntraApp-githubactions"
+        shell: powershell
