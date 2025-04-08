@@ -63,7 +63,7 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4.2.1
         with:
-         name: drop
+         name: EZRepBundle
          path: 'C:\Deploy\MyntraApp-githubactions'  # Target folder for deployment on VM
       
       - name: Stop IIS website
