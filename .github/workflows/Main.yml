@@ -3,10 +3,14 @@ name: Main branch CI
 on:  
    push:
      branches: [ main ]
+
+env:
+  ARTIFACT_NAME: drop
+  
 jobs:  
    build:    
      runs-on: dotnet
-     
+
      steps:
      
        - uses: actions/checkout@v2
@@ -34,3 +38,14 @@ jobs:
 
        - name: Run Tests
          run: vstest.console.exe .\Myntra.Tests\bin\Release\Myntra.Tests.dll
+         
+       - name: Prepare artifact staging directory
+         run: |
+          mkdir -p artifact_output
+          cp -r Myntra/tests/Myntra.Tests/bin/Release/* artifact_output/
+          
+       - name: Publish artifact
+         uses: actions/upload-artifact@v3
+         with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: artifact_output/
