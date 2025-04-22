@@ -10,8 +10,7 @@ on:
     branches:
       - Dev
       - Main
-env:
-  ARTIFACT_NAME: drop
+
   
 jobs:  
    build:    
@@ -74,9 +73,9 @@ jobs:
         with:
            website-name: myntra
            msdeploy-service-url: http://localhost:4023
-           msdeploy-username: WindowsVM
-           msdeploy-password: WindowsVM@12345
-           source-path: C:\Github_runner\A1\_work\MyntraApp-framework\MyntraApp-framework\Deploy
+           msdeploy-username: ${{ secrets.AZURE_VM_USERNAME }}
+           msdeploy-password: ${{ secrets.AZURE_VM_PASSWORD }}
+           source-path: ${{ github.workspace }}\Deploy\
         
  #     - name: Extract Zip
   #      run: |
