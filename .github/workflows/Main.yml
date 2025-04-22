@@ -70,8 +70,8 @@ jobs:
            msdeploy-service-url: http://localhost:4023
            msdeploy-username: WindowsVM
            msdeploy-password: WindowsVM@12345
-           source-path: C:\Deploy\Myntra
-        shell: powershell
+           source-path: C:\Github_runner\A1\_work\MyntraApp-framework\MyntraApp-framework\Deploy
+        
  #     - name: Extract Zip
   #      run: |
    #       Expand-Archive -Path EZRepBundle/WebApp.zip -DestinationPath C:\Deploy\Myntra -Force
