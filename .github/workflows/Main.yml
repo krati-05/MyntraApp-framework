@@ -65,4 +65,4 @@ jobs:
  
       - name: Extract Zip
         run: |
-          Expand-Archive -Path EZRepBundle/WebApp.zip -DestinationPath C:\Users\Public\Deploy\Myntra -Force
+          Expand-Archive -Path EZRepBundle/WebApp.zip -DestinationPath C:\Deploy\Myntra -Force
