@@ -62,7 +62,21 @@ jobs:
         with:
           name: EZRepBundle
           path: Deploy
- 
-      - name: Extract Zip
-        run: |
-          Expand-Archive -Path EZRepBundle/WebApp.zip -DestinationPath C:\Deploy\Myntra -Force
+
+      - name: IIS Deploy
+        uses: ChristopheLav/iis-deploy@v1.0.0
+        with:
+          # IIS website name
+           website-name: myntra
+          # MS Deploy Service URL
+           msdeploy-service-url: http://localhost:4023
+          # Username used by Basic authentication to the MS Deploy Service
+           msdeploy-username: WindowsVM
+          # Password used by Basic authentication to the MS Deploy Service
+           msdeploy-password: WindowsVM@12345
+          # The path to the source directory that will be deployed
+           source-path: C:\Deploy\Myntra
+          
+ #     - name: Extract Zip
+  #      run: |
+   #       Expand-Archive -Path EZRepBundle/WebApp.zip -DestinationPath C:\Deploy\Myntra -Force
