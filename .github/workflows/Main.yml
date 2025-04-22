@@ -71,7 +71,7 @@ jobs:
            msdeploy-username: WindowsVM
            msdeploy-password: WindowsVM@12345
            source-path: C:\Deploy\Myntra
-           shell: powershell
+        shell: powershell
  #     - name: Extract Zip
   #      run: |
    #       Expand-Archive -Path EZRepBundle/WebApp.zip -DestinationPath C:\Deploy\Myntra -Force
