@@ -62,31 +62,34 @@ jobs:
       name: Main
       
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: EZRepBundle
-          path: Deploy
-
-          
-      - name: Ensure IIS site exists (check before create)
-        shell: powershell
-        run: |
-          $siteName = "myntra"
-          $physicalPath = "C:\Deploy\Myntra"
-      
-          if (-Not (Test-Path $physicalPath)) {
-            New-Item -ItemType Directory -Path $physicalPath -Force | Out-Null
-          }
-      
-          $siteExists = & "$env:SystemRoot\System32\inetsrv\appcmd.exe" list site "$siteName" | Out-String
-      
-          if ($siteExists -match "SITE") {
-            Write-Output "IIS site '$siteName' already exists. Skipping creation."
-          } else {
-            & "$env:SystemRoot\System32\inetsrv\appcmd.exe" add site /name:"$siteName" /bindings:"http/*:4023:" /physicalPath:"$physicalPath"
-            Write-Output "Created IIS site '$siteName'"
-          }
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: EZRepBundle
+        path: Deploy
+    
+    - name: Ensure IIS site exists and copy content
+      shell: powershell
+      run: |
+        $siteName = "myntra"
+        $sourcePath = "${{ github.workspace }}\Deploy"
+        $destinationPath = "C:\Deploy\Myntra"
+    
+        if (-Not (Test-Path $destinationPath)) {
+          New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+        }
+    
+        # Copy contents of Deploy to destination
+        Copy-Item -Path "$sourcePath\*" -Destination $destinationPath -Recurse -Force
+    
+        $siteExists = & "$env:SystemRoot\System32\inetsrv\appcmd.exe" list site "$siteName" | Out-String
+    
+        if ($siteExists -match "SITE") {
+          Write-Output "IIS site '$siteName' already exists. Skipping creation."
+        } else {
+          & "$env:SystemRoot\System32\inetsrv\appcmd.exe" add site /name:"$siteName" /bindings:"http/*:4023:" /physicalPath:"$destinationPath"
+          Write-Output "Created IIS site '$siteName'"
+        }
 
 
       #  - name: IIS Deploy
