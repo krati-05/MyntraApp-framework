@@ -67,11 +67,30 @@ jobs:
         with:
           name: EZRepBundle
           path: Deploy
+      - name: Ensure IIS site exists
+        shell: powershell
+        run: |
+          Import-Module WebAdministration
+          $siteName = "myntra-demo"
+          $physicalPath = "C:\inetpub\wwwroot\myntra-demo"
+          $bindingInfo = "*:80:"
+      
+          if (-Not (Test-Path "IIS:\Sites\$siteName")) {
+            New-Item "IIS:\Sites\$siteName" -bindings @{protocol="http";bindingInformation=$bindingInfo} -physicalPath $physicalPath
+            Write-Output "Created IIS site '$siteName' at $physicalPath"
+          } else {
+            Write-Output "IIS site '$siteName' already exists."
+          }
+      
+           Ensure physical path exists
+          if (-Not (Test-Path $physicalPath)) {
+            New-Item -ItemType Directory -Path $physicalPath -Force | Out-Null
+          }
 
       - name: IIS Deploy
         uses: ChristopheLav/iis-deploy@v1.0.0
         with:
-           website-name: myntra
+           website-name: myntra-demo
            msdeploy-service-url: http://localhost:4023
            msdeploy-username: ${{ secrets.AZURE_VM_USERNAME }}
            msdeploy-password: ${{ secrets.AZURE_VM_PASSWORD }}
