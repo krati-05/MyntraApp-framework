@@ -86,14 +86,14 @@ jobs:
             Write-Output "Site might already exist or another error occurred: $_"
           }
 
-      - name: IIS Deploy
-        uses: ChristopheLav/iis-deploy@v1.0.0
-        with:
-           website-name: myntra
-           msdeploy-service-url: http://localhost:4023
-           msdeploy-username: ${{ secrets.AZURE_VM_USERNAME }}
-           msdeploy-password: ${{ secrets.AZURE_VM_PASSWORD }}
-           source-path: ${{ github.workspace }}\Deploy\
+      #  - name: IIS Deploy
+    #    uses: ChristopheLav/iis-deploy@v1.0.0
+     #   with:
+     #      website-name: myntra
+    #       msdeploy-service-url: http://localhost:4023
+    #       msdeploy-username: ${{ secrets.AZURE_VM_USERNAME }}
+    #       msdeploy-password: ${{ secrets.AZURE_VM_PASSWORD }}
+    #       source-path: ${{ github.workspace }}\Deploy\
         
  #     - name: Extract Zip
   #      run: |
