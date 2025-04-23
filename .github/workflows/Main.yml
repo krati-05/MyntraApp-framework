@@ -69,7 +69,7 @@ jobs:
           path: Deploy
 
           
-      - name: Ensure IIS site exists (no WebAdministration)
+      - name: Ensure IIS site exists (safe, no WebAdministration or site listing)
         shell: powershell
         run: |
           $siteName = "myntra"
@@ -79,13 +79,13 @@ jobs:
             New-Item -ItemType Directory -Path $physicalPath -Force | Out-Null
           }
       
-          $siteExists = & "$env:SystemRoot\System32\inetsrv\appcmd.exe" list site "$siteName" | Out-String
-          if ($siteExists -match "SITE") {
-            Write-Output "IIS site '$siteName' already exists."
-          } else {
+          try {
             & "$env:SystemRoot\System32\inetsrv\appcmd.exe" add site /name:"$siteName" /bindings:"http/*:4023:" /physicalPath:"$physicalPath"
             Write-Output "Created IIS site '$siteName'"
+          } catch {
+            Write-Output "Site might already exist or another error occurred: $_"
           }
+
 
       - name: IIS Deploy
         uses: ChristopheLav/iis-deploy@v1.0.0
