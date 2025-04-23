@@ -72,8 +72,8 @@ jobs:
       - name: Ensure IIS site exists (no WebAdministration)
         shell: powershell
         run: |
-          $siteName = "myntra-demo"
-          $physicalPath = "C:\inetpub\wwwroot\myntra-demo"
+          $siteName = "myntra"
+          $physicalPath = "C:\Deploy\Myntra"
       
           if (-Not (Test-Path $physicalPath)) {
             New-Item -ItemType Directory -Path $physicalPath -Force | Out-Null
@@ -83,14 +83,14 @@ jobs:
           if ($siteExists -match "SITE") {
             Write-Output "IIS site '$siteName' already exists."
           } else {
-            & "$env:SystemRoot\System32\inetsrv\appcmd.exe" add site /name:"$siteName" /bindings:"http/*:80:" /physicalPath:"$physicalPath"
+            & "$env:SystemRoot\System32\inetsrv\appcmd.exe" add site /name:"$siteName" /bindings:"http/*:4023:" /physicalPath:"$physicalPath"
             Write-Output "Created IIS site '$siteName'"
           }
 
       - name: IIS Deploy
         uses: ChristopheLav/iis-deploy@v1.0.0
         with:
-           website-name: myntra-demo
+           website-name: myntra
            msdeploy-service-url: http://localhost:4023
            msdeploy-username: ${{ secrets.AZURE_VM_USERNAME }}
            msdeploy-password: ${{ secrets.AZURE_VM_PASSWORD }}
