@@ -67,24 +67,24 @@ jobs:
         with:
           name: EZRepBundle
           path: Deploy
-      - name: Ensure IIS site exists
+
+          
+      - name: Ensure IIS site exists (no WebAdministration)
         shell: powershell
         run: |
-          Import-Module WebAdministration
           $siteName = "myntra-demo"
           $physicalPath = "C:\inetpub\wwwroot\myntra-demo"
-          $bindingInfo = "*:80:"
       
-          if (-Not (Test-Path "IIS:\Sites\$siteName")) {
-            New-Item "IIS:\Sites\$siteName" -bindings @{protocol="http";bindingInformation=$bindingInfo} -physicalPath $physicalPath
-            Write-Output "Created IIS site '$siteName' at $physicalPath"
-          } else {
-            Write-Output "IIS site '$siteName' already exists."
-          }
-      
-           Ensure physical path exists
           if (-Not (Test-Path $physicalPath)) {
             New-Item -ItemType Directory -Path $physicalPath -Force | Out-Null
+          }
+      
+          $siteExists = & "$env:SystemRoot\System32\inetsrv\appcmd.exe" list site "$siteName" | Out-String
+          if ($siteExists -match "SITE") {
+            Write-Output "IIS site '$siteName' already exists."
+          } else {
+            & "$env:SystemRoot\System32\inetsrv\appcmd.exe" add site /name:"$siteName" /bindings:"http/*:80:" /physicalPath:"$physicalPath"
+            Write-Output "Created IIS site '$siteName'"
           }
 
       - name: IIS Deploy
