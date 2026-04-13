@@ -12,8 +12,9 @@ on:
       - Main
 
 jobs:  
-   build:    
-     runs-on: [self-hosted, dotnet]
+   build:
+     runs-on: ubuntu-latest
+     #runs-on: [self-hosted, dotnet]
 
      steps:
      
