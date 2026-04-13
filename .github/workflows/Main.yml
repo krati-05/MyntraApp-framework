@@ -52,6 +52,15 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
+       - name: Official SonarQube Scan
+         uses: SonarSource/sonarqube-scan-action@v7.1.0
+         env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+         with:
+          args: >
+           -Dsonar.projectKey=web-app
+           -Dsonar.organization=kratib
           
        - name: Upload a Build Artifact
          uses: actions/upload-artifact@v4.6.2
