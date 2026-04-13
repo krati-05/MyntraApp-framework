@@ -1,4 +1,4 @@
-name: Master
+name: Main
 
 on:
   push:
@@ -56,6 +56,7 @@ jobs:
           args: >
            -Dsonar.projectKey=web-app
            -Dsonar.organization=kratib
+           -Dsonar.branch.name=master
           
        - name: Upload a Build Artifact
          uses: actions/upload-artifact@v4.6.2
