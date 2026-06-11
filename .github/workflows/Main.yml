@@ -67,6 +67,7 @@ jobs:
           
    deploy:
     name: Deploy to IIS on Azure VM
+    if: false
     runs-on: [self-hosted, VM]
     needs: deploy-build
     environment:
