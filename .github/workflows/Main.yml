@@ -12,7 +12,7 @@ on:
       - Main
 
 jobs:  
-   build:
+   deploy-build:
      runs-on: windows-latest
      #runs-on: ubuntu-latest
      #runs-on: [self-hosted, dotnet]
@@ -68,7 +68,7 @@ jobs:
    deploy:
     name: Deploy to IIS on Azure VM
     runs-on: [self-hosted, VM]
-    needs: build
+    needs: deploy-build
     environment:
       name: Main
       
